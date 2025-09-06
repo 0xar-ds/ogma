@@ -1,11 +1,18 @@
 import { ArgumentsHost, ExecutionContext, HttpException, Injectable } from '@nestjs/common';
 import { HTTP_CODE_METADATA } from '@nestjs/common/constants';
 
+import { OgmaInterceptorServiceOptions } from '../../interfaces';
 import { AbstractInterceptorService } from './abstract-interceptor.service';
 
 @Injectable()
 export abstract class HttpInterceptorService extends AbstractInterceptorService {
-  getStatus(context: ExecutionContext, inColor: boolean, error?: HttpException | Error): string {
+  getStatus(
+    context: ExecutionContext,
+    options: OgmaInterceptorServiceOptions,
+    error?: HttpException | Error,
+  ): string {
+    const inColor = options.color && !options.json;
+
     let status: number;
     const res = this.getResponse(context);
     status = res.statusCode;
